@@ -6,15 +6,15 @@
  * @params list, f, memo
  * */
 
-console.log(
-  reduce(
-    [2, 3, 4],
-    function(a, b){
-      return a + b;
-    },
-
-  )
-)
+// console.log(
+//   reduce(
+//     [2, 3, 4],
+//     function(a, b){
+//       return a + b;
+//     },
+//
+//   )
+// )
 
 // memo = f(1, 2) // 3
 // memo = f(3, 3) // 6
@@ -47,11 +47,11 @@ function reduce(list, f, memo) {
  * )
  * */
 
-const fns = pipe(
-  function(a) { return a + a; },
-  function(a) { return a * a; }
-);
-console.log(fns(1));
+// const fns = pipe(
+//   function(a) { return a + a; },
+//   function(a) { return a * a; }
+// );
+// console.log(fns(1));
 
 function pipe(){
   const fns = arguments;
@@ -81,10 +81,13 @@ function go(arg, ...fns){
   return pipe.apply(null, fns)(arg);
 }
 
-go(
-  1,
-  function(a) { return a + a }, // 2
-  function(a) { return a * a }, // 4
-  console.log
-)
+// go(
+//   1,
+//   function(a) { return a + a }, // 2
+//   function(a) { return a * a }, // 4
+//   console.log
+// )
 
+module.exports = {
+  go
+}
