@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>index</title>
+</head>
+<body>
+<h3> once </h3>
+  <ul class="once_list">
+    <li>once  <button class="once_btn">button</button></li>
+    <li>skip  <button class="skip_btn">button</button></li>
+    <li>plus <button class="plus_btn">0</button></li>
+    <li>method <div class="attr_btn" style="position: relative; background: red; width: 50px; height: 50px"></div></li>
+  </ul>
+<div class="user-list"></div>
+<script type="text/javascript" src="./index.js"></script>
+<script>
+  function $(sel, parent = document) {
+    return parent.querySelector(sel);
+  }
+  /** once */
+  const once = function(f) {
+    let flag, result;
+    return function(){
+      if (flag) return result;
+      flag = true;
+      return result = f.apply(this, arguments);
+    }
+  }
+  $('.once_btn').addEventListener('click', once(function() { log('once'); }))
+
+
+  /** skip */
+  const skip = function(body) {
+    let yes;
+    return function (){
+      return yes || (yes = body.apply(null, arguments));
+    }
+  }
+  const confirmBtn = skip(function() {
+    return confirm('skip 함수로 인해 확인을 눌르면 한번만 나올꺼에요');
+  })
+  $('.skip_btn').addEventListener('click', function(){ return confirmBtn()})
+
+
+  /** plus */
+  function plus (val){
+    return function() {
+      return ++val;
+    }
+  }
+  const plusValue = plus( $('.plus_btn').innerText);
+  $('.plus_btn').addEventListener('click', function ({ target }) {
+    target.innerText = plusValue();
+  });
+
+
+  /** attribute */
+  const attribute = function(method) {
+    const args = rest(arguments);
+    return function(obj) {
+      each(args, (arg) => go(arg, arg => Object.entries(arg), ([[k, v]]) => (obj[method][k] = v)))
+    }
+  }
+  const style = attribute('style', {'background-color': 'black'}, {'width': '100px'});
+  // $('.attr_btn').classList.add('test')
+  log($('.attr_btn').classList)
+  // style($('.attr_btn'));
+
+
+</script>
+</body>
+</html>
