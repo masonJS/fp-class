@@ -17,6 +17,27 @@ for(const a of list){
 }
 
 
+/** iterable */
+const range = {
+  from: 1,
+  to: 5,
+  [Symbol.iterator]() {
+    this.current = this.from
+    return this;
+  },
+  next() {
+    if(this.current < this.to) {
+      return { done: false, value: this.current++ }
+    } else{
+      return { done: true }
+    }
+  }
+}
+
+for(const a of range){
+  console.log(a)
+}
+
 
 function* generatorFunction () {
   yield 'First'
@@ -40,3 +61,30 @@ const generatorObj = generatorFunction()
 
 
 for (let a of generatorObj ) console.log(a)
+
+
+const rangeGenerator = {
+  from: 1,
+  to: 5,
+  *[Symbol.iterator]() {
+    for(this.current= this.from; this.current < this.to; this.current++)
+      yield this.current
+  }
+}
+
+
+console.log([...rangeGenerator])
+
+function* pseudoRandom(seed){
+  let value = seed;
+  while(true){
+    value = value * 16807 % 2147483647;
+    yield value;
+  }
+}
+
+let generator = pseudoRandom(1);
+
+console.log(generator.next().value); // 16807
+console.log(generator.next().value); // 282475249
+console.log(generator.next().value); // 1622650073
