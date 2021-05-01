@@ -43,15 +43,24 @@ const map = curry(pipe(L.map, takeAll))
 
 const filter = curry(pipe(L.filter, takeAll))
 
+const firstGo = (a, f) => a instanceof Promise ? a.then(f) : a(f);
+
 const reduce = curry((f, acc, iter) => {
   if(!iter) {
     iter = acc[Symbol.iterator]();
     acc = iter.next().value;
+  } else{
+    iter = iter[Symbol.iterator]();
   }
-  for(let a of iter) {
-    acc = f(acc, a)
-  }
-  return acc
+  return firstGo(acc, function recur(acc){
+    let cur;
+    while(!(cur = iter.next()).done){
+      const a = cur.value;
+      acc = f(acc, a);
+      if(acc instanceof Promise) return acc.then(recur)
+    }
+    return acc
+  });
 })
 
 const range = len => {
